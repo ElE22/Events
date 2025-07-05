@@ -1,0 +1,21 @@
+<aside [ngClass]="{'active': menuService.isOpenComputed()}"  class="sidebar">
+    <button class="close-sidebar" (click)="menuService.close()" aria-label="Cerrar menú">
+      <i class="fas fa-arrow-left"></i>
+    </button>
+    <nav>
+    <ul>
+        @for (option of menuOptions(); track option.route) {
+        <li >
+            <a 
+            [routerLink]="option.route"
+            routerLinkActive="activeMenuOptions"
+            ><span><i [class]="option.icon"></i></span>{{option.label}}</a>
+        </li>
+        }
+    
+    </ul>
+    </nav>
+    <button class="logout">
+      <span><i class="fas fa-sign-out-alt"></i></span> Cerrar sesión
+    </button>
+  </aside>

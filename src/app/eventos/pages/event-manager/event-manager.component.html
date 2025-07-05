@@ -1,0 +1,12 @@
+<h1>Gestión de Eventos</h1>
+<div class="actions">
+  <button class="add-event-btn" id="addEventBtn" (click)="openModal()">➕ Agregar Nuevo Evento</button>
+</div>
+
+<!-- Formulario emergente -->
+@if(isModal()){
+  <app-add-event-modal (closeModalForm)="closeModal()" />
+}
+
+
+<app-event-card-list [eventos]="eventos()" />

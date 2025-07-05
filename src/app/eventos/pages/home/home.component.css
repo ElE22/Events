@@ -1,0 +1,37 @@
+
+/* Main content area */
+.main {
+  height: 100vh;
+  flex: 1;
+  /* padding: 2rem; */
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  /* --- IMPORTANT CHANGE HERE --- */
+  /* padding-top: 5rem; Ensure space for the always-visible open button */
+  /* --- END IMPORTANT CHANGE --- */
+}
+
+h1 {
+  /* margin-bottom: 2rem; */
+  font-size: 2.2rem;
+  color: var(--primary-color);
+  font-weight: 700;
+}
+
+#feedback {
+  margin-top: 3rem;
+  color: var(--success-color);
+  font-weight: bold;
+  font-size: 1.5rem;
+  opacity: 0;
+  transition: opacity 0.4s ease-in-out;
+  animation: slideInUp 0.5s forwards; /* Add an entrance animation */
+}
+
+#feedback.show {
+  opacity: 1;
+}

@@ -1,1 +1,134 @@
-/* You can add global styles to this file, and also import other style files */
+/* Import Google Fonts for a modern look */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+:root {
+  --primary-color: #007bff;
+  --secondary-color: #6c757d;
+  --background-light: #f8f9fa;
+  --background-dark: #e9ecef;
+  --text-color-dark: #343a40;
+  --text-color-light: #f0f2f5;
+  --border-color: #dee2e6;
+  --success-color: #28a745;
+  --shadow-light: rgba(0, 0, 0, 0.1);
+  --shadow-hover: rgba(0, 0, 0, 0.2);
+}
+
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background-color: var(--text-color-light);
+  color: var(--text-color-dark);
+  line-height: 1.6;
+}
+
+.activeMenuOptions, .activeMenuOptions > span  {
+  background-color: var(--primary-color) !important;
+  color: var(--text-color-light) !important;
+}
+
+
+/* Keyframe for feedback animation */
+@keyframes slideInUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* --- Responsive Design (only adjusts sizing/spacing now) --- */
+
+/* For screens smaller than 768px (common tablet and mobile breakpoint) */
+@media (max-width: 768px) {
+  .app {
+    flex-direction: column;
+  }
+
+  /* Sidebar behavior is now controlled by default styles and JS,
+     so we only adjust padding if needed for smaller screens */
+  .sidebar {
+    width: 85%; /* Sidebar takes full width when active on smaller screens */
+    padding: 1.5rem 1rem;
+  }
+
+  .main {
+    padding: 1.5rem;
+    padding-top: 5rem;
+    justify-content: flex-start;
+  }
+
+  .main h1 {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .emoji-container {
+    gap: 1rem;
+    flex-direction: row; /* Keep emojis in a row but wrap */
+    justify-content: center;
+  }
+
+  .emoji {
+    font-size: 2.5rem;
+    padding: 1rem;
+    flex-basis: 120px; /* Adjust size for smaller screens */
+  }
+
+  .emoji p {
+    font-size: 0.85rem;
+  }
+
+  #feedback {
+    font-size: 1.2rem;
+   
+  }
+}
+
+/* For even smaller screens (e.g., small mobile phones) */
+@media (max-width: 480px) {
+  .sidebar {
+    padding: 1rem;
+  }
+
+  .sidebar nav a {
+    padding: 0.6rem 0.8rem;
+    font-size: 0.9rem;
+  }
+
+  .sidebar nav a span {
+    font-size: 1rem;
+  }
+
+  .logout {
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .main {
+    padding: 1rem;
+    padding-top: 4rem;
+  }
+
+  .main h1 {
+    font-size: 1.5rem;
+  }
+
+  .emoji-container {
+    gap: 0.8rem;
+  }
+
+  .emoji {
+    font-size: 2rem;
+    padding: 0.8rem;
+    flex-basis: 100px;
+  }
+}
+
+
+
+   
+    

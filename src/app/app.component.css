@@ -1,0 +1,40 @@
+.app {
+  display: flex;
+  min-height: 100vh;
+  box-shadow: 0 0 20px var(--shadow-light);
+}
+
+.open-sidebar {
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  cursor: pointer;
+  position: absolute;
+  top: 1.5rem;
+  left: 1.5rem;
+  color: var(--secondary-color);
+  z-index: 999;
+  /* --- IMPORTANT CHANGE HERE --- */
+  display: block; /* Always visible to open the sidebar */
+  /* --- END IMPORTANT CHANGE --- */
+}
+
+
+.eventos {
+  flex: 1;
+  padding: 2rem;
+}
+
+#feedback {
+  margin-top: 3rem;
+  color: var(--success-color);
+  font-weight: bold;
+  font-size: 1.5rem;
+  opacity: 0;
+  transition: opacity 0.4s ease-in-out;
+  animation: slideInUp 0.5s forwards; /* Add an entrance animation */
+}
+
+#feedback.show {
+  opacity: 1;
+}

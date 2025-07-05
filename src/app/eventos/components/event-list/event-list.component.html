@@ -1,0 +1,12 @@
+<div class="emoji-container" (click)="showFeedback()">
+  @for (item of items(); track item.descripcion) {
+    
+    <div class="emoji">
+      <span>{{item.icono}}</span>
+      <p>{{item.descripcion}}</p>
+
+    </div>
+    
+  }
+  
+</div>

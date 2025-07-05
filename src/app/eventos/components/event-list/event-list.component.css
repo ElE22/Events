@@ -1,0 +1,41 @@
+.emoji-container {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap; /* Allow emojis to wrap on smaller screens */
+  margin-top: 2rem;
+}
+
+.emoji {
+  text-align: center;
+  font-size: 3rem; /* Larger emojis */
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+  padding: 1.5rem;
+  border-radius: 15px;
+  background-color: white;
+  box-shadow: 5px 5px 15px var(--shadow-light);
+  flex-basis: 125px; /* Base size for each emoji */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.emoji:hover, .emoji.selected {
+  transform: translateY(-10px) scale(1.05); /* More pronounced hover effect */
+  box-shadow: 0 10px 25px var(--shadow-hover);
+  background-color: var(--background-dark);
+}
+
+.emoji span {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.emoji p {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--secondary-color);
+}
