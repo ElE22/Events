@@ -27,13 +27,4 @@ export default class HomeComponent {
   abrirMenuEvent(){
     this.abrirMenu.emit()
   }
-
-
-
- 
-
-
-
-
-
 }

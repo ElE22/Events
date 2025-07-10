@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { SideMenuComponent } from "./eventos/components/side-menu/side-menu.component";
-import { SideMenuService } from './eventos/services/side-menu.service';
+import { SideMenuComponent } from "./features/eventos/components/side-menu/side-menu.component";
+import { SideMenuService } from './features/eventos/services/side-menu.service';
 
 
 @Component({
