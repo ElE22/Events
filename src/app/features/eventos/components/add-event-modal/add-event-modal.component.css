@@ -16,10 +16,10 @@
 /* Formulario */
 .event-form {
   background: #fff;
-  padding: clamp(1.5rem, 4vw, 2.5rem);
+  padding: clamp(1.9rem, 5vw, 2.5rem);
   border-radius: 1rem;
-  width: 100%;
-  max-width: 500px;
+   margin-top: 20px;
+  max-width: 700px; /* Incrementamos el max-width para los nuevos botones */
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   position: relative;
   animation: fadeIn 0.3s ease-out;
@@ -28,7 +28,8 @@
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  scroll-behavior: smooth;
+  
+  scrollbar-width: none !important;
 }
 
 @keyframes fadeIn {
@@ -116,52 +117,6 @@
   border: none;
 }
 
-/* Satisfacción */
-.satisfaction-options-group {
-  background: #f1f1f1;
-  padding: 1rem;
-  border-radius: 0.75rem;
-  margin-top: 20px;
-}
-
-.satisfaction-options-group label {
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-  display: block;
-}
-
-.satisfaction-option {
-  display: flex;
-  gap: 0.75rem;
- 
-  align-items: center;
-}
-
-.satisfaction-option input {
-  flex: 1;
-  padding: 0.5rem;
-  font-size: 1rem;
-}
-
-.satisfaction-option button, .remove-option-btn {
-  background-color: #e53935;
-  color: white;
-  border: none;
-  padding: 0.5rem;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.add-option-btn {
-  background-color: #007bff;
-  color: white;
-  border: none;
-  padding: 0.6rem 1.2rem;
-  border-radius: 6px;
-  cursor: pointer;
-  margin-top: 0.5rem;
-}
-
 
 
 
@@ -176,18 +131,13 @@
   border-width: 3px !important;
 }
 
-.option-container{
-     display: flex;
-  align-items: center; /* Alinea verticalmente todos los elementos del contenedor */
-  gap: 10px;
-  margin-bottom: 10px;
-}
+
 
 /* -------- Responsive pequeños ajustes -------- */
 @media (max-width: 480px) {
   .event-form {
     border-radius: 0.75rem;
-    padding: 1.9rem;
+    padding: 1.3rem 2.5rem;
   }
 
   .form-actions {
@@ -200,6 +150,7 @@
   }
   .option-container{
     flex-wrap: wrap;
+
   }
 }
 

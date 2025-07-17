@@ -1,0 +1,339 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    /* Los estilos de body pueden variar según tu diseño principal */
+}
+
+/* Estilos comunes para overlays */
+.details-overlay, .edit-options-overlay {
+    display: none; /* Por defecto oculto */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6); /* Fondo semi-transparente */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Asegura que esté por encima de otros elementos */
+    overflow: auto; /* Permite scroll si el contenido es muy largo */
+}
+
+/* Modal de Detalles del Evento */
+.event-details-modal {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    width: 90%;
+    max-width: 750px; /* Ancho máximo para el modal de detalles */
+    position: relative;
+    animation: fadeIn 0.3s ease-out; /* Animación de entrada */
+    margin: 30px auto; /* Centrado y con margen vertical */
+    max-height: calc(100vh - 60px); /* Altura máxima con espacio para scroll */
+    overflow-y: auto;
+    box-sizing: border-box;
+}
+
+/* Animación de entrada */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.event-details-modal h1 {
+    text-align: left;
+    margin-top: 0;
+    margin-bottom: 5px;
+    font-size: 2.2em;
+    color: #2c3e50;
+}
+
+/* Estado del evento en el modal de detalles */
+.event-status-detail-modal {
+    display: inline-block;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 0.9em;
+    color: white;
+    margin-bottom: 20px;
+}
+
+.event-status-detail-modal.active {
+    background-color: #28a745; /* Verde para activo */
+}
+
+.event-status-detail-modal.finished {
+    background-color: #dc3545; /* Rojo para finalizado */
+}
+
+.event-info-modal p {
+    margin-bottom: 10px;
+    line-height: 1.6;
+}
+
+.event-info-modal strong {
+    color: #34495e;
+}
+
+.event-description-modal {
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid #eee; /* Separador */
+}
+
+.event-description-modal h3 {
+    color: #2c3e50;
+    font-size: 1.5em;
+    margin-bottom: 15px;
+}
+
+/* Sección de Opciones de Satisfacción en el modal de detalles */
+.satisfaction-section-modal {
+    margin-top: 30px;
+    padding-top: 25px;
+    border-top: 1px solid #eee;
+}
+
+.satisfaction-section-modal h3 {
+    color: #2c3e50;
+    font-size: 1.5em;
+    margin-bottom: 15px;
+}
+
+.satisfaction-list-modal {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.satisfaction-list-modal li {
+    background-color: #f0f8ff; /* Fondo claro */
+    border-left: 5px solid #007bff; /* Borde izquierdo azul */
+    padding: 12px 15px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    font-size: 1em;
+    color: #444;
+    display: flex;
+    align-items: center;
+}
+
+.satisfaction-list-modal li::before {
+    content: '✔️'; /* Icono de check */
+    margin-right: 10px;
+    color: #007bff;
+    font-size: 1.2em;
+}
+
+.no-satisfaction-options-modal {
+    color: #777;
+    font-style: italic;
+}
+
+/* Controles de Edición en el Modal de Detalles (Estado y botón de Editar Opciones) */
+.modal-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+.modal-controls label {
+    font-weight: bold;
+    color: #34495e;
+    margin-right: 10px;
+}
+
+.modal-controls select {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 0.95em;
+    margin-right: 15px; /* Espacio entre select y botón */
+    min-width: 120px; /* Ancho mínimo para el select */
+}
+
+.modal-controls button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.95em;
+    transition: background-color 0.3s ease;
+}
+
+.modal-controls .save-status-btn {
+    background-color: #28a745; /* Verde para guardar estado */
+    color: white;
+}
+.modal-controls .save-status-btn:hover {
+    background-color: #218838;
+}
+
+.modal-controls .edit-options-btn {
+    background-color: #ffc107; /* Amarillo para editar opciones */
+    color: #333;
+}
+.modal-controls .edit-options-btn:hover {
+    background-color: #e0a800;
+}
+
+/* Estilos del modal de Edición de Opciones de Satisfacción */
+.edit-options-overlay {
+    z-index: 1001; /* Mayor que el modal de detalles para que aparezca encima */
+}
+
+.edit-options-modal {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+    width: 100%;
+    max-width: 900px; /* Ancho más pequeño para este modal */
+    position: relative;
+    animation: fadeIn 0.3s ease-out;
+    margin: 30px auto;
+    max-height: calc(100vh - 60px);
+    overflow-y: auto;
+    box-sizing: border-box;
+}
+
+.edit-options-modal h3 {
+    margin-top: 0;
+    color: #2c3e50;
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+
+.add-option-btn {
+    background-color: #17a2b8; /* Azul para añadir */
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    margin-top: 15px;
+    transition: background-color 0.3s ease;
+    display: block; /* Para que ocupe su propia línea */
+    width: fit-content; /* Se ajusta al contenido */
+    margin-left: auto; /* Centrar o alinear a la derecha */
+    margin-right: auto;
+}
+
+.add-option-btn:hover {
+    background-color: #138496;
+}
+
+/* Botones de acción dentro de los modales (guardar/cancelar) */
+.form-actions {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.form-actions button {
+    padding: 12px 30px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1.1em;
+    margin: 0 10px;
+    transition: background-color 0.3s ease;
+}
+
+.form-actions .submit-btn {
+    background-color: var(--add-boton);
+    color: white;
+}
+
+.form-actions .submit-btn:hover {
+    background-color: #218838;
+}
+
+.form-actions .cancel-btn {
+    background-color: #6c757d;
+    color: white;
+}
+
+.form-actions .cancel-btn:hover {
+    background-color: var(--hover-color);
+}
+
+/* Botón de cerrar modal (X) */
+.close-btn {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 1.8em;
+    color: #999;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.close-btn:hover {
+    color: #333;
+}
+
+
+/* Media Queries para responsividad */
+@media (max-width: 768px) {
+    .event-details-modal, .edit-options-modal {
+        width: 95%;
+        padding: 25px;
+        margin: 15px auto;
+        max-height: calc(100vh - 30px);
+    }
+    .modal-controls {
+        flex-direction: column; /* Apila los controles en pantallas pequeñas */
+        align-items: stretch;
+    }
+    .modal-controls select {
+        margin-bottom: 10px;
+        margin-right: 0;
+        width: 100%;
+    }
+    .modal-controls button {
+        width: 100%;
+        margin-top: 5px;
+    }
+    .form-actions button {
+        padding: 10px 20px;
+        font-size: 1em;
+    }
+    .close-btn {
+        font-size: 1.6em;
+        top: 10px;
+        right: 10px;
+    }
+    .event-details-modal h1 {
+        font-size: 1.8em;
+    }
+    .event-description-modal h3, .satisfaction-section-modal h3, .edit-options-modal h3 {
+        font-size: 1.3em;
+    }
+    .satisfaction-list-modal li {
+        padding: 10px 12px;
+    }
+    .satisfaction-option input {
+        padding: 8px;
+    }
+    .satisfaction-option button {
+        padding: 6px 10px;
+    }
+    .add-option-btn {
+        padding: 8px 15px;
+        font-size: 0.9em;
+    }
+}
+
+@media (max-width: 576px) {
+    .form-actions button {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}

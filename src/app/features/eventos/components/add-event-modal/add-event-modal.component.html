@@ -30,26 +30,10 @@
                 </select>
             </div>
 
-            <div class="satisfaction-options-group " formArrayName="opciones">
-                <label>Opciones de Satisfacción:</label>
-                <div id="satisfactionOptionsContainer">
-                    @let optionList = eventForm.controls.opciones.controls;
-                    @for (opcion of optionList; let i = $index; track opcion) {
-                    <div class="option-container" [formGroupName]="i">
-                        <div class="satisfaction-option">
-                            <input type="text" id="opcion{{i}}" placeholder="Opcion #{{i}}" formControlName="option">
-                        </div>
-                        <div class="satisfaction-option">
-                            <input type="text" id="opcionD{{i}}" placeholder="OpcionD #{{i}}" formControlName="label">
-                        </div>
-                        <button type="button" class="remove-option-btn" (click)="deleteControl(i)">X</button>
-                    </div>
-
-                    }
-                </div>
-                <button type="button" (click)="addControl()" class="add-option-btn" id="addOptionBtn">Agregar
-                    Opción</button>
-            </div>
+                
+                <app-satisfaction-option (rowsChanged)="updateOptionsArray($event)" />
+             
+    
 
             <div class="form-actions">
                 <button type="submit" class="submit-btn">Guardar</button>

@@ -1,0 +1,57 @@
+<div [formGroup]="optionsFrom" class="satisfaction-options-group">
+  <h3 class="group-label">Opciones de Satisfacción:</h3>
+
+  <div [formArrayName]="'opciones'" class="satisfaction-options-container">
+    @let optionsControls = optionsFrom.controls.opciones.controls;
+    @for (opcion of optionsControls; let i = $index; track opcion) {
+    <div class="option-row" [formGroupName]="i">
+      <div class="input-wrapper">
+        
+        <input type="text" id="option-{{i}}" placeholder="Opción de satisfacción" formControlName="option" />
+       
+      </div>
+      <div class="input-wrapper">
+        <input type="text" id="label-{{i}}" placeholder="Etiqueta de satisfacción" formControlName="label" />
+       
+
+      </div>
+      
+      <div class="order-buttons-wrapper">
+        <button
+          type="button"
+          class="order-btn order-up-btn"
+          [disabled]="i === 0"
+          aria-label="Mover opción hacia arriba"
+          (click)="moveUp(i)"
+        >
+          ↑
+        </button>
+        <button type="button" class="order-btn order-down-btn" [disabled]="i === optionsControls.length - 1"
+         aria-label="Mover opción hacia abajo" (click)="moveDown(i)"
+        >
+          ↓
+        </button>
+      </div>
+
+      @if (optionsControls.length > 1) {
+      <button type="button" class="remove-option-btn" (click)="deleteControl(i)" aria-label="Eliminar opción">
+        X
+      </button>
+      }
+    
+      @if (opcion.get('option')?.touched || opcion.get('option')?.invalid){
+        @if (opcion.get('option')?.hasError('required')){
+          <span class="field-error-message">🚨 Campo requerido</span>}
+        @else if (opcion.get('option')?.hasError('minlength')){
+          <span class="field-error-message">🚨 Debe tener al menos 3 caracteres</span>
+        }
+      }
+
+    </div>
+
+    }
+  </div>
+  <button type="button" class="add-option-btn" id="addOptionBtn" (click)="addControl()">
+    Agregar Opción
+  </button>
+</div>

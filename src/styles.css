@@ -2,7 +2,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
 
 :root {
-  --primary-color: #007bff;
+  --primary-color: #047af8;
   --secondary-color: #6c757d;
   --background-light: #f8f9fa;
   --background-dark: #e9ecef;
@@ -12,6 +12,11 @@
   --success-color: #28a745;
   --shadow-light: rgba(0, 0, 0, 0.1);
   --shadow-hover: rgba(0, 0, 0, 0.2);
+  --disabled-color: #B0BEC5;
+  --add-boton: #28a745;
+  --arrow-button: #2d607a;
+  --hover-color: #5a6268;
+  --remove-option-btn: #e53935;
 }
 
 body {

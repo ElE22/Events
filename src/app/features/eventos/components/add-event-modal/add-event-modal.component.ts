@@ -1,11 +1,11 @@
 import { JsonPipe } from '@angular/common';
 import { Component, inject, output } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
-import { isValidDate } from 'rxjs/internal/util/isDate';
+import { SatisfactionOptionComponent } from "@app/shared/components/satisfaction-option/satisfaction-option.component";
 
 @Component({
   selector: 'app-add-event-modal',
-  imports: [ReactiveFormsModule, JsonPipe],
+  imports: [ReactiveFormsModule, JsonPipe, SatisfactionOptionComponent],
   templateUrl: './add-event-modal.component.html',
   styleUrl: './add-event-modal.component.css'
 })
@@ -26,12 +26,7 @@ export class AddEventModalComponent {
     description: [''],
     location: '',
     estado: '',
-    opciones: this.fb.array([
-      this.fb.group({
-        option: ['', Validators.required],
-        label:['', Validators.required]
-      })
-    ])
+    opciones: this.fb.control<string[]>([]), // Inicializa un FormArray vacío para las opciones de satisfacción
   })
 
   handleSubmit(){
@@ -46,16 +41,23 @@ export class AddEventModalComponent {
     }
   }
 
-  addControl(){
-    
-    this.eventForm.controls.opciones.push(
-      this.fb.group({ 
-        option: ['', Validators.required],
-        label: ['', Validators.required]
-      }))
+  updateOptionsArray(options: string[]): void {
+  const opcionesControl = this.eventForm.get('opciones');
+
+  if (!opcionesControl) {
+    console.error('El control "opciones" no existe en el formulario.');
+    return;
   }
 
-  deleteControl(index: number){
-    this.eventForm.controls.opciones.removeAt(index);
+  if (!Array.isArray(options)) {
+    console.error('El valor proporcionado no es un arreglo de strings:', options);
+    return;
   }
+
+  opcionesControl.setValue(options);
+  // console.log('Formulario actualizado:', this.eventForm.value);
+}
+
+
+
 }

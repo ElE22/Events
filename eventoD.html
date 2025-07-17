@@ -1,0 +1,1204 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Eventos</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f7f6;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+        }
+
+        .actions {
+            text-align: right;
+            margin-bottom: 25px;
+            display: flex; /* Permite alinear elementos en la misma línea */
+            justify-content: flex-end; /* Alinea a la derecha */
+            gap: 15px; /* Espacio entre los botones */
+        }
+
+        .add-event-btn, .reports-btn {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+        }
+
+        .add-event-btn:hover, .reports-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .reports-btn {
+            background-color: #6f42c1; /* Color diferente para reportes */
+        }
+        .reports-btn:hover {
+            background-color: #5935a4;
+        }
+
+
+        .event-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .event-card {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.2s ease-in-out;
+            cursor: pointer;
+        }
+
+        .event-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .event-header {
+            padding: 15px;
+            color: #fff;
+            font-weight: 700;
+            font-size: 1.2em;
+        }
+
+        .event-header.active {
+            background-color: #28a745;
+        }
+
+        .event-header.finished {
+            background-color: #dc3545;
+        }
+
+        .event-body {
+            padding: 15px;
+            flex-grow: 1;
+        }
+
+        .event-body h3 {
+            margin-top: 0;
+            color: #34495e;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+
+        .event-body p {
+            font-size: 0.95em;
+            line-height: 1.5;
+            color: #555;
+            margin-bottom: 8px;
+        }
+
+        .event-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85em;
+            color: #777;
+            margin-top: 10px;
+        }
+
+        .event-meta span {
+            display: block;
+        }
+
+        .event-status {
+            padding: 8px 15px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 0.9em;
+            color: #fff;
+        }
+
+        .event-status.active {
+            background-color: #218838;
+        }
+
+        .event-status.finished {
+            background-color: #c82333;
+        }
+
+        /* Estilos para el formulario de agregar evento y modal de detalles */
+        .form-overlay, .details-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            overflow: auto;
+        }
+
+        .event-form, .event-details-modal {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            width: 90%;
+            max-width: 600px;
+            position: relative;
+            animation: fadeIn 0.3s ease-out;
+            margin: 30px auto;
+            max-height: calc(100vh - 60px);
+            overflow-y: auto;
+            box-sizing: border-box;
+        }
+        .event-details-modal {
+            max-width: 750px;
+            padding-bottom: 20px;
+        }
+
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .event-form h2, .event-details-modal h2 {
+            margin-top: 0;
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        .event-details-modal h1 {
+            text-align: left;
+            margin-bottom: 5px;
+            font-size: 2.2em;
+            color: #2c3e50;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 700;
+            color: #34495e;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: calc(100% - 22px);
+            padding: 11px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1em;
+            box-sizing: border-box;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-group select {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2020%2020%22%3E%3Cpath%20d%3D%22M5%208l5%205%205-5z%22%20fill%3D%22%23666%22%2F%3E%3C%2Fsvg%3E');
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            background-size: 12px;
+            padding-right: 30px;
+        }
+
+        .form-actions {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .form-actions button {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1.1em;
+            margin: 0 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        .form-actions .submit-btn {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .form-actions .submit-btn:hover {
+            background-color: #218838;
+        }
+
+        .form-actions .cancel-btn {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .form-actions .cancel-btn:hover {
+            background-color: #5a6268;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 1.8em;
+            color: #999;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .close-btn:hover {
+            color: #333;
+        }
+
+        /* Estilos para el campo dinámico de opciones de satisfacción (Formulario) */
+        .satisfaction-options-group {
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            padding: 18px;
+            margin-top: 25px;
+            background-color: #f9f9f9;
+        }
+
+        .satisfaction-options-group label {
+            display: block;
+            margin-bottom: 12px;
+            font-weight: 700;
+            color: #2c3e50;
+            font-size: 1.05em;
+        }
+
+        .satisfaction-option {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .satisfaction-option input {
+            flex-grow: 1;
+            margin-right: 12px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1em;
+            background-color: #fff;
+            box-sizing: border-box;
+        }
+
+        .satisfaction-option button {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.95em;
+            transition: background-color 0.3s ease;
+        }
+
+        .satisfaction-option button:hover {
+            background-color: #c82333;
+        }
+
+        .add-option-btn {
+            background-color: #17a2b8;
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            margin-top: 15px;
+            transition: background-color 0.3s ease;
+        }
+
+        .add-option-btn:hover {
+            background-color: #138496;
+        }
+
+        /* Estilos para el modal de detalles del evento */
+        .event-status-detail-modal {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.9em;
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .event-status-detail-modal.active {
+            background-color: #28a745;
+        }
+
+        .event-status-detail-modal.finished {
+            background-color: #dc3545;
+        }
+
+        .event-info-modal p {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+
+        .event-info-modal strong {
+            color: #34495e;
+        }
+
+        .event-description-modal {
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+
+        .event-description-modal h3 {
+            color: #2c3e50;
+            font-size: 1.5em;
+            margin-bottom: 15px;
+        }
+
+        .satisfaction-section-modal {
+            margin-top: 30px;
+            padding-top: 25px;
+            border-top: 1px solid #eee;
+        }
+
+        .satisfaction-section-modal h3 {
+            color: #2c3e50;
+            font-size: 1.5em;
+            margin-bottom: 15px;
+        }
+
+        .satisfaction-list-modal {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .satisfaction-list-modal li {
+            background-color: #f0f8ff;
+            border-left: 5px solid #007bff;
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            font-size: 1em;
+            color: #444;
+            display: flex;
+            align-items: center;
+        }
+
+        .satisfaction-list-modal li::before {
+            content: '✔️';
+            margin-right: 10px;
+            color: #007bff;
+            font-size: 1.2em;
+        }
+
+        .no-satisfaction-options-modal {
+            color: #777;
+            font-style: italic;
+        }
+
+        /* Controles de edición en el modal de detalles (NUEVO) */
+        .modal-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+
+        .modal-controls select {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 0.95em;
+            margin-right: 15px; /* Espacio entre select y botón */
+        }
+
+        .modal-controls button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.95em;
+            transition: background-color 0.3s ease;
+        }
+
+        .modal-controls .save-status-btn {
+            background-color: #28a745;
+            color: white;
+        }
+        .modal-controls .save-status-btn:hover {
+            background-color: #218838;
+        }
+
+        .modal-controls .edit-options-btn {
+            background-color: #ffc107; /* Amarillo para editar */
+            color: #333;
+        }
+        .modal-controls .edit-options-btn:hover {
+            background-color: #e0a800;
+        }
+
+        /* Estilos del modal de edición de opciones */
+        .edit-options-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1001; /* Mayor que el modal de detalles */
+            overflow: auto;
+        }
+
+        .edit-options-modal {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+            width: 90%;
+            max-width: 550px;
+            position: relative;
+            animation: fadeIn 0.3s ease-out;
+            margin: 30px auto;
+            max-height: calc(100vh - 60px);
+            overflow-y: auto;
+            box-sizing: border-box;
+        }
+
+        .edit-options-modal h3 {
+            margin-top: 0;
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .edit-options-modal .satisfaction-options-group {
+            border: none;
+            padding: 0;
+            margin-top: 0;
+            background-color: transparent;
+        }
+
+        .edit-options-modal .form-actions {
+            margin-top: 25px;
+        }
+
+
+        /* Media Queries */
+        @media (max-width: 768px) {
+            .actions {
+                flex-direction: column; /* Apila los botones en columnas */
+                align-items: flex-end; /* Alinea a la derecha */
+            }
+            .add-event-btn, .reports-btn {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+            .event-grid {
+                grid-template-columns: 1fr;
+            }
+            .event-form, .event-details-modal, .edit-options-modal {
+                width: 95%;
+                padding: 25px;
+                margin: 15px auto;
+                max-height: calc(100vh - 30px);
+            }
+            .form-actions button {
+                padding: 10px 20px;
+                font-size: 1em;
+            }
+            .close-btn {
+                font-size: 1.6em;
+                top: 10px;
+                right: 10px;
+            }
+            .event-details-modal h1 {
+                font-size: 1.8em;
+            }
+            .event-description-modal h3, .satisfaction-section-modal h3, .edit-options-modal h3 {
+                font-size: 1.3em;
+            }
+            .satisfaction-list-modal li {
+                padding: 10px 12px;
+            }
+            .modal-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .modal-controls select {
+                margin-bottom: 10px;
+                margin-right: 0;
+                width: 100%;
+            }
+            .modal-controls button {
+                width: 100%;
+                margin-top: 5px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .form-actions button {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Gestión de Eventos</h1>
+
+        <div class="actions">
+            <button class="reports-btn" id="reportsBtn">Ir a Reportes</button>
+            <button class="add-event-btn" id="addEventBtn">Agregar Nuevo Evento</button>
+        </div>
+
+        <div class="event-grid" id="eventGrid">
+            <div class="event-card" data-event-id="1">
+                <div class="event-header active">
+                    Conferencia Anual de Tecnología 2025
+                </div>
+                <div class="event-body">
+                    <h3>Innovación y Futuro Digital</h3>
+                    <p>Un evento imperdible para profesionales y entusiastas de la tecnología, explorando las últimas tendencias en IA, blockchain y ciberseguridad.</p>
+                    <div class="event-meta">
+                        <span><strong>Fecha:</strong> 2025-10-15</span>
+                        <span><strong>Lugar:</strong> Centro de Convenciones</span>
+                    </div>
+                </div>
+                <div class="event-status active">
+                    Activo
+                </div>
+            </div>
+
+            <div class="event-card" data-event-id="2">
+                <div class="event-header finished">
+                    Seminario de Marketing Digital
+                </div>
+                <div class="event-body">
+                    <h3>Estrategias para el Éxito Online</h3>
+                    <p>Sesiones intensivas sobre SEO, SEM, redes sociales y content marketing, con casos de éxito y talleres prácticos.</p>
+                    <div class="event-meta">
+                        <span><strong>Fecha:</strong> 2024-05-20</span>
+                        <span><strong>Lugar:</strong> Auditorio Principal</span>
+                    </div>
+                </div>
+                <div class="event-status finished">
+                    Finalizado
+                </div>
+            </div>
+
+            <div class="event-card" data-event-id="3">
+                <div class="event-header active">
+                    Taller de Desarrollo Web Fullstack
+                </div>
+                <div class="event-body">
+                    <h3>De Principiante a Experto en 6 Meses</h3>
+                    <p>Aprende las tecnologías más demandadas del desarrollo web, desde el frontend hasta el backend, con proyectos reales.</p>
+                    <div class="event-meta">
+                        <span><strong>Fecha:</strong> 2025-09-01</span>
+                        <span><strong>Lugar:</b> Espacio Co-working</span>
+                    </div>
+                </div>
+                <div class="event-status active">
+                    Activo
+                </div>
+            </div>
+
+            <div class="event-card" data-event-id="4">
+                <div class="event-header finished">
+                    Festival Gastronómico Urbano
+                </div>
+                <div class="event-body">
+                    <h3>Sabores del Mundo en tu Ciudad</h3>
+                    <p>Un fin de semana lleno de delicias culinarias, food trucks, chefs invitados y música en vivo para toda la familia.</p>
+                    <div class="event-meta">
+                        <span><strong>Fecha:</strong> 2024-07-12</span>
+                        <span><strong>Lugar:</strong> Parque Central</span>
+                    </div>
+                </div>
+                <div class="event-status finished">
+                    Finalizado
+                </div>
+            </div>
+
+            <div class="event-card" data-event-id="5">
+                <div class="event-header active">
+                    Webinar: Ciberseguridad para PYMES
+                </div>
+                <div class="event-body">
+                    <h3>Protege tu Negocio de Amenazas Digitales</h3>
+                    <p>Descubre las mejores prácticas y herramientas para salvaguardar la información de tu empresa y prevenir ataques.</p>
+                    <div class="event-meta">
+                        <span><strong>Fecha:</strong> 2025-08-05</span>
+                        <span><strong>Lugar:</strong> Online (Zoom)</span>
+                    </div>
+                </div>
+                <div class="event-status active">
+                    Activo
+                </div>
+            </div>
+
+            <div class="event-card" data-event-id="6">
+                <div class="event-header finished">
+                    Exposición de Arte Contemporáneo
+                </div>
+                <div class="event-body">
+                    <h3>Reflejos del Alma Moderna</h3>
+                    <p>Una colección impresionante de obras de artistas emergentes y consolidados, explorando diversas técnicas y conceptos.</p>
+                    <div class="event-meta">
+                        <span><strong>Fecha:</strong> 2024-03-10</span>
+                        <span><strong>Lugar:</strong> Galería de Arte Metropolitano</span>
+                    </div>
+                </div>
+                <div class="event-status finished">
+                    Finalizado
+                </div>
+            </div>
+
+            <div class="event-card" data-event-id="7">
+                <div class="event-header active">
+                    Jornada de Innovación en Salud Digital
+                </div>
+                <div class="event-body">
+                    <h3>Transformando el Futuro de la Medicina</h3>
+                    <p>Un encuentro para explorar cómo la tecnología está revolucionando la atención médica y el bienestar.</p>
+                    <div class="event-meta">
+                        <span><strong>Fecha:</strong> 2025-11-20</span>
+                        <span><strong>Lugar:</strong> Hospital Universitario</span>
+                    </div>
+                </div>
+                <div class="event-status active">
+                    Activo
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-overlay" id="eventFormOverlay">
+        <div class="event-form">
+            <span class="close-btn" id="closeFormBtn">&times;</span>
+            <h2>Agregar Nuevo Evento</h2>
+            <form>
+                <div class="form-group">
+                    <label for="eventNameInput">Nombre del Evento:</label>
+                    <input type="text" id="eventNameInput" placeholder="Ej: Conferencia de Innovación" required>
+                </div>
+                <div class="form-group">
+                    <label for="eventDescriptionInput">Descripción:</label>
+                    <textarea id="eventDescriptionInput" placeholder="Detalles del evento..." required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="eventDateInput">Fecha:</label>
+                    <input type="date" id="eventDateInput" required>
+                </div>
+                <div class="form-group">
+                    <label for="eventLocationInput">Lugar:</label>
+                    <input type="text" id="eventLocationInput" placeholder="Ej: Centro de Convenciones" required>
+                </div>
+                <div class="form-group">
+                    <label for="eventStatusInput">Estado:</label>
+                    <select id="eventStatusInput" required>
+                        <option value="active">Activo</option>
+                        <option value="finished">Finalizado</option>
+                    </select>
+                </div>
+
+                <div class="satisfaction-options-group">
+                    <label>Opciones de Satisfacción del Cliente:</label>
+                    <div id="satisfactionOptionsContainer">
+                        <div class="satisfaction-option">
+                            <input type="text" placeholder="Ej: Calidad del contenido" value="Calidad del contenido">
+                            <button type="button" class="remove-option-btn">X</button>
+                        </div>
+                        <div class="satisfaction-option">
+                            <input type="text" placeholder="Ej: Organización del evento" value="Organización del evento">
+                            <button type="button" class="remove-option-btn">X</button>
+                        </div>
+                        <div class="satisfaction-option">
+                            <input type="text" placeholder="Ej: Interacción con ponentes" value="Interacción con ponentes">
+                            <button type="button" class="remove-option-btn">X</button>
+                        </div>
+                    </div>
+                    <button type="button" class="add-option-btn" id="addOptionBtn">Agregar Opción</button>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="submit-btn">Guardar Evento</button>
+                    <button type="button" class="cancel-btn" id="cancelFormBtn">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="details-overlay" id="eventDetailsOverlay">
+        <div class="event-details-modal">
+            <span class="close-btn" id="closeDetailsModalBtn">&times;</span>
+            <h1 id="detailEventName"></h1>
+            <span id="detailEventStatus" class="event-status-detail-modal"></span>
+
+            <div class="event-info-modal">
+                <p><strong>Fecha:</strong> <span id="detailEventDate"></span></p>
+                <p><strong>Lugar:</strong> <span id="detailEventLocation"></span></p>
+            </div>
+
+            <div class="event-description-modal">
+                <h3>Descripción del Evento</h3>
+                <p id="detailEventDescription"></p>
+            </div>
+
+            <div class="satisfaction-section-modal">
+                <h3>Opciones de Satisfacción del Cliente</h3>
+                <ul id="detailSatisfactionOptionsList" class="satisfaction-list-modal">
+                    </ul>
+                <p id="detailNoSatisfactionOptions" class="no-satisfaction-options-modal" style="display: none;">Este evento no tiene opciones de satisfacción configuradas.</p>
+            </div>
+
+            <div class="modal-controls">
+                <div>
+                    <label for="editEventStatus">Cambiar Estado:</label>
+                    <select id="editEventStatus">
+                        <option value="active">Activo</option>
+                        <option value="finished">Finalizado</option>
+                    </select>
+                    <button class="save-status-btn" id="saveEventStatusBtn">Guardar Estado</button>
+                </div>
+                <button class="edit-options-btn" id="editSatisfactionOptionsBtn">Editar Opciones de Satisfacción</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="edit-options-overlay" id="editOptionsOverlay">
+        <div class="edit-options-modal">
+            <span class="close-btn" id="closeEditOptionsModalBtn">&times;</span>
+            <h3>Editar Opciones de Satisfacción</h3>
+            <div class="satisfaction-options-group">
+                <div id="editSatisfactionOptionsContainer">
+                    </div>
+                <button type="button" class="add-option-btn" id="addEditOptionBtn">Agregar Nueva Opción</button>
+            </div>
+            <div class="form-actions">
+                <button type="button" class="submit-btn" id="saveEditedOptionsBtn">Guardar Cambios</button>
+                <button type="button" class="cancel-btn" id="cancelEditOptionsBtn">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- Datos de eventos simulados directamente en JavaScript ---
+        // En una aplicación real, estos datos vendrían de tu backend
+        const mockEventsData = {
+            '1': {
+                id: 1,
+                nombre: 'Conferencia Anual de Tecnología 2025',
+                descripcion: 'Un evento imperdible para profesionales y entusiastas de la tecnología, explorando las últimas tendencias en IA, blockchain y ciberseguridad. Contará con ponentes internacionales y talleres interactivos. Prepárate para dos días de inmersión total en el futuro digital.',
+                fecha: '2025-10-15',
+                lugar: 'Centro de Convenciones',
+                estado: 'activo',
+                opciones_satisfaccion: [
+                    'Calidad del contenido presentado',
+                    'Organización y logística del evento',
+                    'Interacción con los ponentes y network',
+                    'Relevancia de los temas tratados',
+                    'Experiencia general del evento y facilidades'
+                ]
+            },
+            '2': {
+                id: 2,
+                nombre: 'Seminario de Marketing Digital',
+                descripcion: 'Sesiones intensivas sobre SEO, SEM, redes sociales y content marketing, con casos de éxito y talleres prácticos. Este seminario te brindará las herramientas para potenciar tu presencia online.',
+                fecha: '2024-05-20',
+                lugar: 'Auditorio Principal',
+                estado: 'finalizado',
+                opciones_satisfaccion: [
+                    'Utilidad de la información recibida',
+                    'Claridad de las presentaciones y ejemplos',
+                    'Aplicabilidad de las técnicas aprendidas'
+                ]
+            },
+            '3': {
+                id: 3,
+                nombre: 'Taller de Desarrollo Web Fullstack',
+                descripcion: 'Aprende las tecnologías más demandadas del desarrollo web, desde el frontend (React, Vue) hasta el backend (Node.js, Python), con proyectos reales y mentoría personalizada. Un curso intensivo de 6 meses para transformar tu carrera.',
+                fecha: '2025-09-01',
+                lugar: 'Espacio Co-working',
+                estado: 'activo',
+                opciones_satisfaccion: [
+                    'Metodología de enseñanza y ritmo de aprendizaje',
+                    'Calidad del material didáctico y recursos',
+                    'Soporte técnico y resolución de dudas',
+                    'Dominio y experiencia de los instructores'
+                ]
+            },
+            '4': {
+                id: 4,
+                nombre: 'Festival Gastronómico Urbano',
+                descripcion: 'Un fin de semana lleno de delicias culinarias, food trucks, chefs invitados y música en vivo para toda la familia. Explora sabores de todo el mundo en un ambiente vibrante y festivo.',
+                fecha: '2024-07-12',
+                lugar: 'Parque Central',
+                estado: 'finalizado',
+                opciones_satisfaccion: [
+                    'Variedad y calidad de la comida ofrecida',
+                    'Ambiente, música y entretenimiento',
+                    'Organización y limpieza de los stands'
+                ]
+            },
+            '5': {
+                id: 5,
+                nombre: 'Webinar: Ciberseguridad para PYMES',
+                descripcion: 'Descubre las mejores prácticas y herramientas esenciales para salvaguardar la información de tu empresa y prevenir ataques cibernéticos. Esta sesión online interactiva te dará conocimientos clave para proteger tu negocio.',
+                fecha: '2025-08-05',
+                lugar: 'Online (Zoom)',
+                estado: 'activo',
+                opciones_satisfaccion: [
+                    'Claridad de la explicación y ejemplos prácticos',
+                    'Utilidad de las herramientas y consejos presentados',
+                    'Interacción con el ponente y resolución de dudas'
+                ]
+            },
+            '6': {
+                id: 6,
+                nombre: 'Exposición de Arte Contemporáneo',
+                descripcion: 'Una colección impresionante de obras de artistas emergentes y consolidados, explorando diversas técnicas y conceptos en el arte moderno. Sumérgete en el mundo del arte actual.',
+                fecha: '2024-03-10',
+                lugar: 'Galería de Arte Metropolitano',
+                estado: 'finalizado',
+                opciones_satisfaccion: [] // Ejemplo de evento sin opciones de satisfacción
+            },
+            '7': {
+                id: 7,
+                nombre: 'Jornada de Innovación en Salud Digital',
+                descripcion: 'Explora las últimas tendencias y aplicaciones de la tecnología en el sector de la salud, desde telemedicina hasta IA en diagnóstico. Un evento para profesionales de la salud y tecnólogos.',
+                fecha: '2025-11-20',
+                lugar: 'Hospital Universitario',
+                estado: 'activo',
+                opciones_satisfaccion: [
+                    'Impacto de las ponencias en mi área',
+                    'Oportunidades de networking',
+                    'Calidad de las demostraciones tecnológicas',
+                    'Organización general del evento'
+                ]
+            }
+        };
+
+        // Variable global para almacenar el ID del evento que se está visualizando/editando
+        let currentEventId = null;
+
+        // Elementos del formulario de agregar evento
+        const addEventBtn = document.getElementById('addEventBtn');
+        const eventFormOverlay = document.getElementById('eventFormOverlay');
+        const closeFormBtn = document.getElementById('closeFormBtn');
+        const cancelFormBtn = document.getElementById('cancelFormBtn');
+        const satisfactionOptionsContainer = document.getElementById('satisfactionOptionsContainer');
+        const addOptionBtn = document.getElementById('addOptionBtn');
+
+        // Elementos del modal de detalles del evento
+        const eventDetailsOverlay = document.getElementById('eventDetailsOverlay');
+        const closeDetailsModalBtn = document.getElementById('closeDetailsModalBtn');
+        const detailEventName = document.getElementById('detailEventName');
+        const detailEventStatus = document.getElementById('detailEventStatus');
+        const detailEventDate = document.getElementById('detailEventDate');
+        const detailEventLocation = document.getElementById('detailEventLocation');
+        const detailEventDescription = document.getElementById('detailEventDescription');
+        const detailSatisfactionOptionsList = document.getElementById('detailSatisfactionOptionsList');
+        const detailNoSatisfactionOptions = document.getElementById('detailNoSatisfactionOptions');
+
+        // Controles de edición en el modal de detalles
+        const editEventStatusSelect = document.getElementById('editEventStatus');
+        const saveEventStatusBtn = document.getElementById('saveEventStatusBtn');
+        const editSatisfactionOptionsBtn = document.getElementById('editSatisfactionOptionsBtn');
+
+        // Elementos del modal de edición de opciones
+        const editOptionsOverlay = document.getElementById('editOptionsOverlay');
+        const closeEditOptionsModalBtn = document.getElementById('closeEditOptionsModalBtn');
+        const editSatisfactionOptionsContainer = document.getElementById('editSatisfactionOptionsContainer');
+        const addEditOptionBtn = document.getElementById('addEditOptionBtn');
+        const saveEditedOptionsBtn = document.getElementById('saveEditedOptionsBtn');
+        const cancelEditOptionsBtn = document.getElementById('cancelEditOptionsBtn');
+
+        // Elemento contenedor de las tarjetas de evento
+        const eventGrid = document.getElementById('eventGrid');
+
+        // Botón para ir a reportes
+        const reportsBtn = document.getElementById('reportsBtn');
+
+        // Funcionalidad para el formulario de agregar evento
+        addEventBtn.addEventListener('click', () => {
+            eventFormOverlay.style.display = 'flex';
+        });
+
+        closeFormBtn.addEventListener('click', () => {
+            eventFormOverlay.style.display = 'none';
+        });
+
+        cancelFormBtn.addEventListener('click', () => {
+            eventFormOverlay.style.display = 'none';
+        });
+
+        addOptionBtn.addEventListener('click', () => {
+            const newOptionDiv = document.createElement('div');
+            newOptionDiv.classList.add('satisfaction-option');
+            newOptionDiv.innerHTML = `
+                <input type="text" placeholder="Nueva opción de satisfacción">
+                <button type="button" class="remove-option-btn">X</button>
+            `;
+            satisfactionOptionsContainer.appendChild(newOptionDiv);
+        });
+
+        satisfactionOptionsContainer.addEventListener('click', (event) => {
+            if (event.target.classList.contains('remove-option-btn')) {
+                event.target.closest('.satisfaction-option').remove();
+            }
+        });
+
+        document.querySelector('.event-form form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Formulario de creación de evento enviado (simulado). Verifica la consola para los valores.');
+
+            const eventName = document.getElementById('eventNameInput').value;
+            const eventDescription = document.getElementById('eventDescriptionInput').value;
+            const eventDate = document.getElementById('eventDateInput').value;
+            const eventLocation = document.getElementById('eventLocationInput').value;
+            const eventStatus = document.getElementById('eventStatusInput').value;
+
+            const satisfactionOptions = [];
+            document.querySelectorAll('#satisfactionOptionsContainer input').forEach(input => {
+                if (input.value.trim() !== '') {
+                    satisfactionOptions.push(input.value.trim());
+                }
+            });
+
+            console.log({
+                eventName,
+                eventDescription,
+                eventDate,
+                eventLocation,
+                eventStatus,
+                satisfactionOptions
+            });
+
+            eventFormOverlay.style.display = 'none';
+            // En una aplicación real, aquí recargarías la lista de eventos o añadirías el nuevo evento al DOM
+        });
+
+
+        // --- Funcionalidad para el modal de detalles del evento ---
+        eventGrid.addEventListener('click', (event) => {
+            const clickedCard = event.target.closest('.event-card');
+            if (clickedCard) {
+                currentEventId = clickedCard.dataset.eventId; // Guarda el ID del evento actual
+                const eventData = mockEventsData[currentEventId];
+
+                if (eventData) {
+                    // Rellenar los detalles del modal
+                    detailEventName.textContent = eventData.nombre;
+                    detailEventStatus.textContent = eventData.estado === 'active' ? 'Activo' : 'Finalizado';
+                    detailEventStatus.className = 'event-status-detail-modal ' + eventData.estado;
+                    detailEventDate.textContent = eventData.fecha;
+                    detailEventLocation.textContent = eventData.lugar;
+                    detailEventDescription.textContent = eventData.descripcion;
+
+                    // Establecer el valor del select de estado en el modal de detalles
+                    editEventStatusSelect.value = eventData.estado;
+
+                    // Limpiar opciones anteriores y agregar las nuevas
+                    detailSatisfactionOptionsList.innerHTML = '';
+                    if (eventData.opciones_satisfaccion && eventData.opciones_satisfaccion.length > 0) {
+                        eventData.opciones_satisfaccion.forEach(option => {
+                            const li = document.createElement('li');
+                            li.textContent = option;
+                            detailSatisfactionOptionsList.appendChild(li);
+                        });
+                        detailSatisfactionOptionsList.style.display = 'block';
+                        detailNoSatisfactionOptions.style.display = 'none';
+                    } else {
+                        detailSatisfactionOptionsList.style.display = 'none';
+                        detailNoSatisfactionOptions.style.display = 'block';
+                    }
+
+                    eventDetailsOverlay.style.display = 'flex'; // Mostrar el modal
+                } else {
+                    console.error('Evento no encontrado para el ID:', currentEventId);
+                }
+            }
+        });
+
+        // Cerrar el modal de detalles
+        closeDetailsModalBtn.addEventListener('click', () => {
+            eventDetailsOverlay.style.display = 'none';
+            currentEventId = null; // Limpiar el ID del evento actual
+        });
+
+        // --- Funcionalidad para cambiar el estado del evento ---
+        saveEventStatusBtn.addEventListener('click', () => {
+            if (!currentEventId) return;
+
+            const newStatus = editEventStatusSelect.value;
+            mockEventsData[currentEventId].estado = newStatus; // Actualiza los datos simulados
+
+            // Actualiza la visualización en el modal de detalles
+            detailEventStatus.textContent = newStatus === 'active' ? 'Activo' : 'Finalizado';
+            detailEventStatus.className = 'event-status-detail-modal ' + newStatus;
+
+            // Opcional: Actualizar la tarjeta en la cuadrícula principal
+            const cardToUpdate = eventGrid.querySelector(`[data-event-id="${currentEventId}"]`);
+            if (cardToUpdate) {
+                cardToUpdate.querySelector('.event-header').className = 'event-header ' + newStatus;
+                cardToUpdate.querySelector('.event-status').className = 'event-status ' + newStatus;
+                cardToUpdate.querySelector('.event-status').textContent = newStatus === 'active' ? 'Activo' : 'Finalizado';
+            }
+
+            alert(`Estado del evento ${mockEventsData[currentEventId].nombre} cambiado a: ${newStatus}`);
+            // En una aplicación real, aquí harías una llamada PUT/PATCH a tu backend para actualizar el estado
+        });
+
+
+        // --- Funcionalidad para el modal de edición de opciones de satisfacción ---
+        editSatisfactionOptionsBtn.addEventListener('click', () => {
+            if (!currentEventId) return;
+
+            const eventData = mockEventsData[currentEventId];
+            editSatisfactionOptionsContainer.innerHTML = ''; // Limpiar opciones anteriores
+
+            // Rellenar el modal de edición con las opciones actuales
+            if (eventData.opciones_satisfaccion && eventData.opciones_satisfaccion.length > 0) {
+                eventData.opciones_satisfaccion.forEach(option => {
+                    const newOptionDiv = document.createElement('div');
+                    newOptionDiv.classList.add('satisfaction-option');
+                    newOptionDiv.innerHTML = `
+                        <input type="text" value="${option}">
+                        <button type="button" class="remove-option-btn">X</button>
+                    `;
+                    editSatisfactionOptionsContainer.appendChild(newOptionDiv);
+                });
+            } else {
+                // Si no hay opciones, añade una vacía para empezar
+                const newOptionDiv = document.createElement('div');
+                newOptionDiv.classList.add('satisfaction-option');
+                newOptionDiv.innerHTML = `
+                    <input type="text" placeholder="Nueva opción de satisfacción">
+                    <button type="button" class="remove-option-btn">X</button>
+                `;
+                editSatisfactionOptionsContainer.appendChild(newOptionDiv);
+            }
+
+            editOptionsOverlay.style.display = 'flex'; // Mostrar el modal de edición
+        });
+
+        // Añadir nueva opción en el modal de edición
+        addEditOptionBtn.addEventListener('click', () => {
+            const newOptionDiv = document.createElement('div');
+            newOptionDiv.classList.add('satisfaction-option');
+            newOptionDiv.innerHTML = `
+                <input type="text" placeholder="Nueva opción de satisfacción">
+                <button type="button" class="remove-option-btn">X</button>
+            `;
+            editSatisfactionOptionsContainer.appendChild(newOptionDiv);
+        });
+
+        // Eliminar opción en el modal de edición (usando delegación de eventos)
+        editSatisfactionOptionsContainer.addEventListener('click', (event) => {
+            if (event.target.classList.contains('remove-option-btn')) {
+                event.target.closest('.satisfaction-option').remove();
+            }
+        });
+
+        // Guardar las opciones editadas
+        saveEditedOptionsBtn.addEventListener('click', () => {
+            if (!currentEventId) return;
+
+            const newOptions = [];
+            document.querySelectorAll('#editSatisfactionOptionsContainer input').forEach(input => {
+                const trimmedValue = input.value.trim();
+                if (trimmedValue !== '') {
+                    newOptions.push(trimmedValue);
+                }
+            });
+
+            mockEventsData[currentEventId].opciones_satisfaccion = newOptions; // Actualiza los datos simulados
+
+            // Vuelve a renderizar las opciones en el modal de detalles para que se vea el cambio
+            detailSatisfactionOptionsList.innerHTML = '';
+            if (newOptions.length > 0) {
+                newOptions.forEach(option => {
+                    const li = document.createElement('li');
+                    li.textContent = option;
+                    detailSatisfactionOptionsList.appendChild(li);
+                });
+                detailSatisfactionOptionsList.style.display = 'block';
+                detailNoSatisfactionOptions.style.display = 'none';
+            } else {
+                detailSatisfactionOptionsList.style.display = 'none';
+                detailNoSatisfactionOptions.style.display = 'block';
+            }
+
+            alert('Opciones de satisfacción actualizadas para el evento: ' + mockEventsData[currentEventId].nombre);
+            editOptionsOverlay.style.display = 'none'; // Cerrar el modal de edición
+            // En una aplicación real, aquí harías una llamada PUT/PATCH a tu backend para actualizar las opciones
+        });
+
+        // Cerrar/Cancelar el modal de edición
+        closeEditOptionsModalBtn.addEventListener('click', () => {
+            editOptionsOverlay.style.display = 'none';
+        });
+
+        cancelEditOptionsBtn.addEventListener('click', () => {
+            editOptionsOverlay.style.display = 'none';
+        });
+
+        // --- Funcionalidad para el botón "Ir a Reportes" ---
+        reportsBtn.addEventListener('click', () => {
+            alert('¡Redirigiendo a la página de reportes! (Esta es solo una simulación)');
+            // En una aplicación real, aquí podrías:
+            // window.location.href = 'reportes.html'; // Si tienes una página de reportes separada
+            // O si es una SPA, cargar la vista de reportes
+        });
+
+        // Sugerencia Adicional: Inicializar la interfaz al cargar la página
+        // Esto es útil si las tarjetas se renderizarán dinámicamente en una aplicación real.
+        // Aquí no es estrictamente necesario porque las tarjetas son estáticas en el HTML.
+        // function renderEventCards() {
+        //     // Podrías iterar sobre mockEventsData aquí y crear las tarjetas dinámicamente
+        // }
+        // renderEventCards();
+    </script>
+</body>
+</html>
