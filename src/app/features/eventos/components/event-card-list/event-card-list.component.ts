@@ -1,6 +1,8 @@
-import { Component, input } from '@angular/core';
+import { Component, computed, inject, input, signal } from '@angular/core';
 import { EventCardListItemComponent } from "./event-card-list-item/event-card-list-item.component";
 import { Eventos } from '../../interfaces/event.interface';
+import { actualizarEstado, EventData } from '../../interfaces/eventData.interface';
+import { EventosService } from '@features/eventos/services/eventos.service';
 
 
 
@@ -11,5 +13,19 @@ import { Eventos } from '../../interfaces/event.interface';
   styleUrl: './event-card-list.component.css'
 })
 export class EventCardListComponent {
- eventos = input<Eventos[]>();
+ //eventos = input<Eventos[]>();
+ eventoService = inject(EventosService)
+
+eventos = computed(() => this.eventoService.getEventos());
+// eventos = signal(this.eventoService.getEventos())
+
+ modificarEstadoEvento ($event: actualizarEstado){
+  console.log("llego al mpadre: ", $event)
+  this.eventoService.actualizarEstadoEvento($event);
+
+ console.log(" estado actualizado : ", this.eventos())
+ }
+
+
+
 }

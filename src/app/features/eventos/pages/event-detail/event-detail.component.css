@@ -192,7 +192,7 @@ body {
     padding: 30px;
     border-radius: 8px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
-    width: 100%;
+    width: fit-content;
     max-width: 900px; /* Ancho más pequeño para este modal */
     position: relative;
     animation: fadeIn 0.3s ease-out;

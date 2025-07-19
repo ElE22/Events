@@ -1,20 +1,20 @@
 
 <a  class="event-card-link" (click)="openEventDetailModal()">
     <div class="event-card">
-        <div class="event-header finished">Seminario de Marketing Digital</div>
+        <div class="event-header" [ngClass]="infoEvent()!.estado === 0 ? 'active' : 'finished'">{{infoEvent()!.nombre}}</div>
         <div class="event-body">
-            <h3>Estrategias para el Éxito Online</h3>
-            <p>Sesiones intensivas sobre SEO, SEM, redes sociales y content marketing...</p>
+            <h3>{{infoEvent()?.nombre}}</h3>
+            <p>{{infoEvent()!.descripcion | tuncatePipe:80}}</p>
             <div class="event-meta">
-                <span>📅 <strong>2024-05-20</strong></span>
-                <span>📍 Auditorio Principal</span>
+                <span>📅 <strong>{{infoEvent()?.fecha}}</strong></span>
+                <span>📍 {{infoEvent()!.lugar}}</span>
             </div>
         </div>
-        <div class="event-status finished">🔴 Finalizado</div>
+        <div class="event-status" [ngClass]="infoEvent()!.estado === 0 ? 'active' : 'finished'"> {{infoEvent()!.estado === 0 ? "🟢 Activo": "⛔Finalizado"}}</div>
     </div>
     
 </a>
 
 @if (isOpenedDetailModal()) {
-    <app-event-detail [eventId]="1" (close)="closeEventDetailModal()"></app-event-detail>
+    <app-event-detail [event]="infoEvent()" (close)="closeEventDetailModal()" (estadoUpdated)="updateEstadoEvento($event)"></app-event-detail>
 }

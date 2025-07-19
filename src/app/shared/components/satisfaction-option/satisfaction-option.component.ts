@@ -40,9 +40,6 @@ export class SatisfactionOptionComponent {
   }
 
   addControl() {
-    // Obtener el valor actual del FormArray para determinar el próximo orden
-    const currentOptions = this.optionArray().value;
-    const nextOrder = currentOptions.length > 0 ? Math.max(...currentOptions.map((o: any) => o.order || 0)) + 1 : 1;
 
     const newControl = this.fb.group({
       option: ['', [Validators.required, Validators.minLength(3)]],

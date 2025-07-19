@@ -1,50 +1,52 @@
-<div class="details-overlay" *ngIf="isDetailsModalOpen()">
+<div class="details-overlay" >
     <div class="event-details-modal">
         <span class="close-btn" (click)="closeDetailsModal()">&times;</span>
-
-        <ng-container *ngIf="currentEvent(); else noEventSelected">
-            <h1 id="detailEventName">{{ currentEvent()!.nombre }}</h1>
+            <h1 id="detailEventName">{{ event()!.nombre }}</h1>
             <span id="detailEventStatus"
                   class="event-status-detail-modal"
-                  [ngClass]="currentEvent()!.estado === 'active' ? 'active' : 'finished'">
-                {{ currentEvent()!.estado === 'active' ? 'Activo' : 'Finalizado' }}
+                  [ngClass]="event()!.estado === 0 ? 'active' : 'finished'">
+                {{ event()!.estado === 0 ? 'Activos' : 'Finalizado' }}
             </span>
 
             <div class="event-info-modal">
-                <p><strong>Fecha:</strong> <span id="detailEventDate">{{ currentEvent()!.fecha }}</span></p>
-                <p><strong>Lugar:</strong> <span id="detailEventLocation">{{ currentEvent()!.lugar }}</span></p>
+                <p><strong>Fecha:</strong> <span id="detailEventDate">{{ event()!.fecha }}</span></p>
+                <p><strong>Lugar:</strong> <span id="detailEventLocation">{{ event()!.lugar }}</span></p>
             </div>
 
             <div class="event-description-modal">
                 <h3>Descripción del Evento</h3>
-                <p id="detailEventDescription">{{ currentEvent()!.descripcion }}</p>
+                <p id="detailEventDescription">{{ event()!.descripcion }}</p>
             </div>
 
             <div class="satisfaction-section-modal">
                 <h3>Opciones de Satisfacción del Cliente</h3>
                 <ul id="detailSatisfactionOptionsList" class="satisfaction-list-modal">
-                    @for (option of currentEvent()!.opciones_satisfaccion; track option) {
+                    @for (option of event()!.opciones_satisfaccion; track option) {
                         <li ><strong>Opcion:</strong> <span>&nbsp;</span> {{ option[0] }}, <span>&nbsp;&nbsp;</span> <strong>Etiqueta:&nbsp;</strong> <span>&nbsp;</span> {{ option[1]?.trim() ? option[1] : 'Etiqueta vacía'}}</li>
                     }
                     
                 </ul>
-                <p id="detailNoSatisfactionOptions" class="no-satisfaction-options-modal"
-                   *ngIf="!hasSatisfactionOptions()">
-                    Este evento no tiene opciones de satisfacción configuradas.
-                </p>
+                @if (hasSatisfactionOptions()){
+                    <p id="detailNoSatisfactionOptions" class="no-satisfaction-options-modal"> Este evento no tiene opciones de satisfacción configuradas.</p>
+                }
+                
             </div>
 
             <div class="modal-controls">
                 <div>
                     <label for="editEventStatus">Cambiar Estado:</label>
                     <select id="editEventStatus" (change)="saveEventStatus($event)">
-                        <option value="active">Activo</option>
-                        <option value="finished">Finalizado</option>
+                        @if (event()!.estado === 0) {
+                            <option value="active">Activo</option>
+                            <option value="finished">Finalizado</option>
+                        } @else {
+                            <option value="active">Activo</option>
+                            <option value="finished" selected>Finalizado</option>
+                        }   
                     </select>
                     </div>
                 <button class="edit-options-btn" (click)="openEditOptionsModal()">Editar Opciones de Satisfacción</button>
             </div>
-        </ng-container>
 
         <ng-template #noEventSelected>
             <p style="text-align: center; color: #666;">No se ha seleccionado ningún evento para mostrar.</p>
@@ -55,7 +57,7 @@
     <div class="edit-options-overlay" >
     <div class="edit-options-modal">
         <span class="close-btn"(click)="closeEditOptionsModal()" >&times;</span>
-        @let sendData = currentEvent()?.opciones_satisfaccion || null;
+        @let sendData = event()?.opciones_satisfaccion || null;
         <h3> Edicion de Opciones</h3>
         <app-satisfaction-option [loadData]="sendData" />
         <div class="form-actions">

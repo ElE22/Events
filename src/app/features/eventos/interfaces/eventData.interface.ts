@@ -1,10 +1,16 @@
 // --- Interfaces para los datos del evento ---
 export interface EventData {
-  id: number;
+  id: string;
   nombre: string;
   descripcion: string;
   fecha: string;
   lugar: string;
-  estado: 'active' | 'finished';
+  estado: number;
   opciones_satisfaccion: [string, string?][];
+}
+
+
+export interface actualizarEstado {
+  id: string;
+  newEstado: number;
 }

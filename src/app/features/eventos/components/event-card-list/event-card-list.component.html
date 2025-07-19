@@ -1,5 +1,6 @@
 <div class="event-grid">
-    @for (eventus of eventos(); track eventus.titulo ) {
-       <app-event-card-list-item />
+    @for (event of eventos(); track event.id ) {
+       
+       <app-event-card-list-item [infoEvent]="event" (actualizarEstadoEvento)="modificarEstadoEvento($event)" />
     }
 </div>

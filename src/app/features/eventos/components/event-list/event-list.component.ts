@@ -4,7 +4,7 @@ import { EventCardListItemComponent } from '../event-card-list/event-card-list-i
 
 @Component({
   selector: 'app-event-list',
-  imports: [EventCardListItemComponent],
+  imports: [],
   templateUrl: './event-list.component.html',
   styleUrl: './event-list.component.css'
 })
