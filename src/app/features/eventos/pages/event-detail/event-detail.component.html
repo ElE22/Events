@@ -15,7 +15,11 @@
 
             <div class="event-description-modal">
                 <h3>Descripción del Evento</h3>
-                <p id="detailEventDescription">{{ event()!.descripcion }}</p>
+                @if(this.event()?.descripcion){
+                 <p id="detailEventDescription">{{ event()!.descripcion }}</p>
+                } @else {
+                 <p id="detailEventDescription">No hay descripción del evento.</p>
+                }
             </div>
 
             <div class="satisfaction-section-modal">
@@ -26,7 +30,7 @@
                     }
                     
                 </ul>
-                @if (hasSatisfactionOptions()){
+                @if (!hasSatisfactionOptions()){
                     <p id="detailNoSatisfactionOptions" class="no-satisfaction-options-modal"> Este evento no tiene opciones de satisfacción configuradas.</p>
                 }
                 

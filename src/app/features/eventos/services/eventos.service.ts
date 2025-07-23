@@ -20,7 +20,19 @@ export class EventosService {
   constructor(private http: HttpClient) {}
 
  private eventosGlobal= signal<EventData[]>([
-    {
+       {
+          id: "23443-43-4-3",
+          nombre: 'Seminario de Marketing Digital',
+          descripcion: '',
+          fecha: '2024-05-20',
+          lugar: '',
+          estado: 1,
+          opciones_satisfaccion: [
+            ['Utilidad de la información recibida', 'Hola'],
+            ['Claridad de las presentaciones y ejemplos', "hee"],
+            ['Aplicabilidad de las técnicas aprendidas', '4r3']
+          ]
+        }, {
           id: "wfdf-rf-rf-rr-re",
           nombre: 'Conferencia Anual de Tecnología 2025',
           descripcion: 'Un evento imperdible para profesionales y entusiastas de la tecnología, explorando las últimas tendencias en IA, blockchain y ciberseguridad. Contará con ponentes internacionales y talleres interactivos. Prepárate para dos días de inmersión total en el futuro digital.',
@@ -33,19 +45,6 @@ export class EventosService {
             ['Interacción con los ponentes y network', "dsvsd"],
             ['Relevancia de los temas tratados', "dsvfsdvsd"], 
             ['Experiencia general del evento y facilidades', "vfdf"]
-          ]
-        },
-       {
-          id: "23443-43-4-3",
-          nombre: 'Seminario de Marketing Digital',
-          descripcion: 'Sesiones intensivas sobre SEO, SEM, redes sociales y content marketing, con casos de éxito y talleres prácticos. Este seminario te brindará las herramientas para potenciar tu presencia online.',
-          fecha: '2024-05-20',
-          lugar: 'Auditorio Principal',
-          estado: 1,
-          opciones_satisfaccion: [
-            ['Utilidad de la información recibida', 'Hola'],
-            ['Claridad de las presentaciones y ejemplos', "hee"],
-            ['Aplicabilidad de las técnicas aprendidas', '4r3']
           ]
         },
          {
@@ -65,6 +64,15 @@ export class EventosService {
           lugar: 'Museoal',
           estado: 0,
           opciones_satisfaccion: [["Vision", "buena"], ["Vision2", "buena2"]]
+        },
+         {
+          id: '4345435435545-4354-12',
+          nombre: 'ExposINGsdd',
+          descripcion: 'Una exposición de arte contemporáneo.',
+          fecha: '2022-02-01',
+          lugar: 'Museoal',
+          estado: 0,
+          opciones_satisfaccion: [["Vision", "buena"], ["Vision2", "buena2"]]
         }
       ]);
 
@@ -79,8 +87,11 @@ export class EventosService {
     return this.eventosGlobal().filter(evento => evento.id === id )
   }
 
-  crearEvento(evento: Evento): Observable<Evento> {
-    return this.http.post<Evento>(this.apiUrl, evento, { withCredentials: true });
+  // crearEvento(evento: Evento): Observable<Evento> {
+  //   return this.http.post<Evento>(this.apiUrl, evento, { withCredentials: true });
+  // }
+  crearEvento(evento: EventData): void {
+     this.eventosGlobal().push(evento)
   }
 
   actualizarEvento(id: number, evento: Evento): Observable<Evento> {

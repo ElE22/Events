@@ -3,7 +3,7 @@ import { Component, inject, input, output, signal } from '@angular/core';
 import {  FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 @Component({
   selector: 'app-satisfaction-option',
-  imports: [ReactiveFormsModule, JsonPipe],
+  imports: [ReactiveFormsModule],
   templateUrl: './satisfaction-option.component.html',
   styleUrl: './satisfaction-option.component.css'
 })
@@ -29,6 +29,10 @@ export class SatisfactionOptionComponent {
       this.fb.group({
         option: ['', [Validators.required, Validators.minLength(3)]],
         label: [''],
+      }),
+      this.fb.group({
+        option: ['', [Validators.required, Validators.minLength(3)]],
+        label: [''],
       })
     ])
   })
@@ -40,13 +44,10 @@ export class SatisfactionOptionComponent {
   }
 
   addControl() {
-
     const newControl = this.fb.group({
       option: ['', [Validators.required, Validators.minLength(3)]],
       label: [''],
     });
-
-
     this.optionArray().push(newControl);
     this.emitUpdate();
   }
@@ -61,9 +62,7 @@ export class SatisfactionOptionComponent {
 
   loadDataIntoFormArray(): void {
     const data = this.loadData();
-
     const formArray = this.optionsFrom.get('opciones') as FormArray;
-
     // Limpiamos lo anterior
     formArray.clear();
 

@@ -20,12 +20,6 @@ eventos = computed(() => this.eventoService.getEventos());
 // eventos = signal(this.eventoService.getEventos())
 
  modificarEstadoEvento ($event: actualizarEstado){
-  console.log("llego al mpadre: ", $event)
   this.eventoService.actualizarEstadoEvento($event);
-
- console.log(" estado actualizado : ", this.eventos())
  }
-
-
-
 }

@@ -21,11 +21,4 @@ export default class EventManagerComponent {
   closeModal(){
     this.isModalOpen.set(false);
   }
-
-  // eventos = signal<Eventos[]>( [{titulo: 'Innovación y Futuro Digital', descripcion: 'Un evento imperdible para profesionales y entusiastas de la tecnología...',
-  //   fecha: '2025-10-15', location: '📍 Centro de Convenciones', status: '💚 Activo'
-  //  }, {titulo: 'Innovación y Futuro Digitales', descripcion: 'Un evento imperdible para profesionales y entusiastas de la tecnología...',
-  //   fecha: '2025-10-15', location: '📍 Centro de Convenciones', status: '💚 Activo'
-  //  }])
-
 }

@@ -32,6 +32,12 @@ body {
   color: var(--text-color-light) !important;
 }
 
+.field-error-message {
+  color: #d32f2f;
+  font-size: 1.2em;
+  
+}
+
 
 /* Keyframe for feedback animation */
 @keyframes slideInUp {

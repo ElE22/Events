@@ -28,7 +28,7 @@
     .event-header.finished { background-color: #e53935; }
 
     .event-body {
-      padding: 20px;
+      padding: 14px;
       flex: 1;
     }
 

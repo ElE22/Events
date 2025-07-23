@@ -8,15 +8,17 @@
   align-items: center;
   z-index: 1000;
   padding: 1rem; /* para evitar bordes pegados en móviles */
-  overflow-y: auto;
+  overflow-y: hidden;
   overscroll-behavior: contain;
+
   -webkit-overflow-scrolling: touch;
 }
 
 /* Formulario */
 .event-form {
+   overflow-y: none;
   background: #fff;
-  padding: clamp(1.9rem, 5vw, 2.5rem);
+  padding: 10px 40px;
   border-radius: 1rem;
    margin-top: 20px;
   max-width: 700px; /* Incrementamos el max-width para los nuevos botones */
@@ -117,7 +119,9 @@
   border: none;
 }
 
-
+h2{
+  margin: 0px;
+}
 
 
 .required {
