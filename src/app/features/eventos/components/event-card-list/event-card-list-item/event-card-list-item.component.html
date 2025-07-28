@@ -5,7 +5,7 @@
         <div class="event-body">
             <h3>Descripción del Evento</h3>
                 @if(this.infoEvent()!.descripcion){
-                 <p id="detailEventDescription">{{infoEvent()!.descripcion | tuncatePipe:40}}</p>
+                 <p id="detailEventDescription">{{infoEvent()!.descripcion | tuncatePipe:30}}</p>
                 } @else {
                  <p id="detailEventDescription">No hay descripción del evento.</p>
                 }

@@ -40,7 +40,7 @@ export class EventosService {
           lugar: 'Centro de Convenciones',
           estado: 1,
           opciones_satisfaccion: [
-            ['Calidad del contenido presentado'],
+            ['Calidad del contenido presentado', ''],
             ['Organización y logística del evento', 'fdvdf'],
             ['Interacción con los ponentes y network', "dsvsd"],
             ['Relevancia de los temas tratados', "dsvfsdvsd"], 
@@ -71,6 +71,23 @@ export class EventosService {
           descripcion: 'Una exposición de arte contemporáneo.',
           fecha: '2022-02-01',
           lugar: 'Museoal',
+          estado: 0,
+          opciones_satisfaccion: [["Vision", "buena"], ["Vision2", "buena2"]]
+        },{
+          id: '4345435435545-4334r2434-12',
+          nombre: 'Hola eventos',
+          descripcion: 'Una exposición de arte contemporáneo dfewfwerew.',
+          fecha: '2025-12-01',
+          lugar: 'Nose io',
+          estado: 0,
+          opciones_satisfaccion: [["Vision", "buena"], ["Vision2", "buena2"]]
+        },
+        {
+          id: '4345435435545-werewrwe34r2434-12',
+          nombre: 'adios eventos',
+          descripcion: 'Una exposición de arte contemporáneo dfewfwerew.',
+          fecha: '2025-12-01',
+          lugar: 'Nose io',
           estado: 0,
           opciones_satisfaccion: [["Vision", "buena"], ["Vision2", "buena2"]]
         }

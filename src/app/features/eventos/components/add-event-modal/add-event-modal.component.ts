@@ -3,6 +3,7 @@ import { Component, inject, output } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import { SatisfactionOptionComponent } from "@app/shared/components/satisfaction-option/satisfaction-option.component";
 import { EventosService } from '../../services/eventos.service';
+import { EventData } from '../../interfaces/eventData.interface';
 
 @Component({
   selector: 'app-add-event-modal',
@@ -13,7 +14,7 @@ import { EventosService } from '../../services/eventos.service';
 export class AddEventModalComponent {
   closeModalForm = output<void>();
   eventosService = inject(EventosService)
-  fb = inject(FormBuilder);
+  private fb = inject(FormBuilder);
   eventForm = this.fb.group({
     nombre: ['', [
       Validators.required,
@@ -22,20 +23,30 @@ export class AddEventModalComponent {
       ]],
     descripcion: [''],
     lugar: '',
-    estado: '',
     opciones_satisfaccion: this.fb.array([],[Validators.required])
   })
 
-  optionArray(): FormArray<FormGroup> {
+  private optionArray(): FormArray<FormGroup> {
     return this.eventForm.get('opciones_satisfaccion') as FormArray<FormGroup>;
   }
-
+  
   handleSubmit(){
     const newEvent = this.eventForm.value;
     if (this.eventForm.valid) {
       // console.log("Form:: ", this.eventForm.controls.opciones_satisfaccion.controls.map(name => name.value));
-      
-      this.closeModal(); 
+      const formValue = this.eventForm.value;
+
+      const test: EventData = {
+        id: "550e8400-e29b-41d4-a716-446655440000",
+        nombre: formValue.nombre ?? '',
+        descripcion: formValue.descripcion ?? '',
+        lugar: formValue.lugar ?? '',
+        estado: 0,
+        fecha: `${Date.now()}`,
+        opciones_satisfaccion: this.optionArray().controls.map(g => [g.value.option, g.value.label])
+      };
+      this.eventosService.crearEvento(test)
+      this.closeModal();
     } else {
       console.log('Formulario inválido');
     }

@@ -1,68 +1,81 @@
 .event-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 30px;
-    }
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 30px;
+}
 
-    .event-card {
-      background: rgba(255, 255, 255, 0.75);
-      border-radius: 16px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-      backdrop-filter: blur(10px);
-      overflow: hidden;
-      transition: transform 0.2s ease-in-out;
-      display: flex;
-      flex-direction: column;
-    }
+.event-card {
+  background: rgba(255, 255, 255, 0.75);
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  overflow: hidden;
+  max-height: 320px;
+  transition: transform 0.2s ease-in-out;
+  display: flex;
+  flex-direction: column;
+}
 
-    .event-card:hover { transform: translateY(-5px); }
+.event-card:hover {
+  transform: translateY(-5px);
+}
 
-    .event-header {
-      padding: 18px;
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: #fff;
-    }
+.event-header {
+  padding: 18px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #fff;
+}
 
-    .event-header.active { background-color: #43a047; }
-    .event-header.finished { background-color: #e53935; }
+.event-header.active {
+  background-color: #43a047;
+}
 
-    .event-body {
-      padding: 14px;
-      flex: 1;
-    }
+.event-header.finished {
+  background-color: #e53935;
+}
 
-    .event-body h3 {
-      color: #263238;
-      margin-bottom: 10px;
-    }
+.event-body {
+  padding: 14px;
+  flex: 1;
+}
 
-    .event-body p {
-      font-size: 0.95rem;
-      color: #555;
-      margin-bottom: 12px;
-    }
+.event-body h3 {
+  color: #263238;
+  margin-bottom: 10px;
+}
 
-    .event-meta {
-      font-size: 0.85rem;
-      color: #666;
-      display: flex;
-      justify-content: space-between;
-      flex-wrap: wrap;
-    }
+.event-body p {
+  font-size: 0.95rem;
+  color: #555;
+  margin-bottom: 12px;
+}
 
-    .event-status {
-      padding: 12px;
-      text-align: center;
-      font-weight: bold;
-      font-size: 0.95rem;
-      color: #fff;
-    }
+.event-meta {
+  font-size: 0.85rem;
+  color: #666;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
 
-    .event-status.active { background-color: #2e7d32; }
-    .event-status.finished { background-color: #b71c1c; }
+.event-status {
+  padding: 12px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 0.95rem;
+  color: #fff;
+}
 
-    /* .form-overlay {
+.event-status.active {
+  background-color: #2e7d32;
+}
+
+.event-status.finished {
+  background-color: #b71c1c;
+}
+
+/* .form-overlay {
       display: none;
       position: fixed;
       top: 0; left: 0;
@@ -176,7 +189,76 @@
       cursor: pointer;
     } */
 
-    @media (max-width: 600px) {
-      .event-form { width: 95%; }
-      h1 { font-size: 2rem; }
-    }
+@media (max-width: 600px) {
+  .event-form {
+    width: 95%;
+  }
+
+  h1 {
+    font-size: 2rem;
+  }
+}
+
+
+
+/* @media (max-width: 1280px) {
+  .event-grid {
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  }
+}
+
+@media (max-width: 900px) {
+  .event-grid {
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .event-grid {
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  }
+} */
+
+
+
+
+/* === telefonos pequeños (hasta 480px) === */
+@media (max-width: 480px) {
+  .event-grid {
+    grid-template-columns: 1fr;
+    /* padding: 10px; */
+  }
+
+  h1 {
+    font-size: 1.5rem;
+  }
+}
+
+/* === Tablets pequeñas y telefonos grandes (481px - 767px) === */
+@media (min-width: 481px) and (max-width: 767px) {
+  .event-grid {
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  }
+}
+
+/* === Tablets medianas (768px - 1023px) === */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .event-grid {
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  } 
+}
+
+/* === Laptops (1024px - 1279px) === */
+@media (min-width: 1024px) and (max-width: 2069px) {
+  .event-grid {
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  }
+}
+
+/* === Monitores grandes (1280px o más) === */
+/* @media (min-width: 2070px) {
+  .event-grid {
+    grid-template-columns: repeat(5, 1fr);
+    color:aqua;
+  }
+} */
