@@ -19,7 +19,4 @@ export class EventCardListComponent {
 eventos = computed(() => this.eventoService.getEventos());
 // eventos = signal(this.eventoService.getEventos())
 
- modificarEstadoEvento ($event: actualizarEstado){
-  this.eventoService.actualizarEstadoEvento($event);
- }
 }

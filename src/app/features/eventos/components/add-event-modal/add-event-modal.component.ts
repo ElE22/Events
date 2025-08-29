@@ -4,6 +4,7 @@ import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators} fro
 import { SatisfactionOptionComponent } from "@app/shared/components/satisfaction-option/satisfaction-option.component";
 import { EventosService } from '../../services/eventos.service';
 import { EventData } from '../../interfaces/eventData.interface';
+import {v4 as uuidv4} from 'uuid';
 
 @Component({
   selector: 'app-add-event-modal',
@@ -31,13 +32,12 @@ export class AddEventModalComponent {
   }
   
   handleSubmit(){
-    const newEvent = this.eventForm.value;
     if (this.eventForm.valid) {
       // console.log("Form:: ", this.eventForm.controls.opciones_satisfaccion.controls.map(name => name.value));
       const formValue = this.eventForm.value;
 
       const test: EventData = {
-        id: "550e8400-e29b-41d4-a716-446655440000",
+        id:  uuidv4(),
         nombre: formValue.nombre ?? '',
         descripcion: formValue.descripcion ?? '',
         lugar: formValue.lugar ?? '',

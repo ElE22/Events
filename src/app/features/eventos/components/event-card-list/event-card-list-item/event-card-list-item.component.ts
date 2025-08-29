@@ -27,11 +27,6 @@ export class EventCardListItemComponent {
     this.eventDetailModal.set(false);
   }
 
-  updateEstadoEvento(event: actualizarEstado) {
-    console.log("hijo", event)
-    this.actualizarEstadoEvento.emit(event);
-  }
-
 
 
 }

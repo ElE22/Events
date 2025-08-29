@@ -63,9 +63,11 @@
         <span class="close-btn"(click)="closeEditOptionsModal()" >&times;</span>
         @let sendData = event()?.opciones_satisfaccion || null;
         <h3> Edicion de Opciones</h3>
-        <app-satisfaction-option [loadData]="sendData" />
+        <app-satisfaction-option [loadData]="sendData" (rowsChanged)="updateOpciones($event)" />
         <div class="form-actions">
-                <button type="submit" class="submit-btn" (click)="saveEditedOptions()">Guardar Cambios</button> 
+                @if (!this.isEqual()) {
+                    <button type="submit" class="submit-btn" (click)="saveEditedOptions()" [ngClass]="this.opcionesUpdateForm.valid? 'submit-btn' : 'cancel-btn'" [disabled]="!this.opcionesUpdateForm.valid">Guardar Cambios</button> 
+                }
                 <button type="button" class="cancel-btn" (click)="closeEditOptionsModal()">Cancelar</button>
             </div>
         </div>

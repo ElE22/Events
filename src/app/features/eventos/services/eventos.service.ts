@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 
 export interface Evento {
-  id?: number;
+  id?: string;
   nombre: string;
   fecha: string;
   descripcion: string;
@@ -111,8 +111,11 @@ export class EventosService {
      this.eventosGlobal().push(evento)
   }
 
-  actualizarEvento(id: number, evento: Evento): Observable<Evento> {
-    return this.http.patch<Evento>(`${this.apiUrl}/${id}`, evento, { withCredentials: true });
+  actualizarEvento(evento: Evento): void {
+    // return this.http.patch<Evento>(`${this.apiUrl}/${evento.id}`, evento, { withCredentials: true });
+    const actualizados =  this.eventosGlobal().map(event => evento.id === event.id ? {...event, ...evento} : event )
+    this.eventosGlobal.set(actualizados)
+    return;
   }
 
   eliminarEvento(id: number): Observable<void> {
