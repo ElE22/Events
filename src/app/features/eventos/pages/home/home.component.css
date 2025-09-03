@@ -35,3 +35,20 @@ h1 {
 #feedback.show {
   opacity: 1;
 }
+
+.btn-cambiar-evento{
+  font-size: 1.8rem;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s ease-in-out;
+   top: 1.5rem;
+  right: 1.5rem;
+   position: absolute;             /* ponerlo a la derecha */
+  left: auto;  
+  cursor: pointer;
+  color: var(--secondary-color);  
+  z-index: 999;
+  display: block;
+}

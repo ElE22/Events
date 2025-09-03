@@ -23,6 +23,7 @@ export class AddEventModalComponent {
       Validators.pattern(/^[a-zA-Z\s0-9]+$/)
       ]],
     descripcion: [''],
+    pregunta: ['', [Validators.required, Validators.minLength(5)]],
     lugar: '',
     opciones_satisfaccion: this.fb.array([],[Validators.required])
   })
@@ -41,6 +42,7 @@ export class AddEventModalComponent {
         nombre: formValue.nombre ?? '',
         descripcion: formValue.descripcion ?? '',
         lugar: formValue.lugar ?? '',
+        pregunta: formValue.pregunta ?? '',
         estado: 0,
         fecha: `${Date.now()}`,
         opciones_satisfaccion: this.optionArray().controls.map(g => [g.value.option, g.value.label])

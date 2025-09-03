@@ -1,11 +1,20 @@
+ <button class="btn-cambiar-evento" (click)="openModal()"> <i class="fa-solid fa-right-left"></i></button>
 <main class="main">
+   
+    @if(this.getEventosActivos().length > 0 && this.eventoSelected() ) {
+        <h1>{{this.eventoSelected()?.pregunta}}</h1>
+        <app-event-list [items]="this.eventoSelected()?.opciones_satisfaccion || []" (onMensaje)="showFeedback($event)" />
+        <p id="feedback">
+            @if (showMsg()) {
+            {{feedback()}}
+            }
+        </p>
+    }@else {
+    <h2>No hay eventos disponibles. Por favor, contacte al administrador.</h2>
+    }
 
-    <h1>{{titulo}}</h1>
-    <app-event-list [items]="items()" (onMensaje)="showFeedback($event)" />
-    <p id="feedback">
-        @if (showMsg()) {
-        {{feedback()}}
-        }
-    </p>
+    @if(modalVisible()){
+    <app-select-event (SelectedEvent)="handleEventoSeleccionado($event)" (closePopup)="closeModal()" />
+    }
 
 </main>

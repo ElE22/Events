@@ -1,0 +1,21 @@
+@if(this.mostrarPopup()) {
+<div class="popup-overlay" (click)="cerrarPopup()">
+    <div class="popup-content" (click)="$event.stopPropagation()">
+        <div class="popup-header">
+            <h2>Selecciona un Evento</h2>
+            <button class="popup-close" (click)="cerrarPopup()">×</button>
+        </div>
+
+        @if(eventos.length) {
+        <div class="event-list">
+            @for (evento of eventos; track evento.id) {
+            <app-card-item-event [infoEvent]="evento" (click)="seleccionarEvento(evento)">
+            </app-card-item-event>
+            }
+        </div>
+        }@else {
+        <p class="no-events">No hay eventos disponibles.</p>
+        }
+    </div>
+</div>
+}

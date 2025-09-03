@@ -1,0 +1,22 @@
+<div class="event-card">
+        <div class="event-header" [ngClass]="infoEvent()!.estado === 0 ? 'active' : 'finished'">{{infoEvent()!.nombre}}</div>
+        <div class="event-body">
+            <h3>Descripción del Evento</h3>
+                @if(this.infoEvent()!.descripcion){
+                 <p id="detailEventDescription">{{infoEvent()!.descripcion | tuncatePipe:30}}</p>
+                } @else {
+                 <p id="detailEventDescription">No hay descripción del evento.</p>
+                }
+            <div class="event-meta">
+                <span>📅 <strong>{{infoEvent()?.fecha}}</strong></span>
+                @if(infoEvent()!.lugar){
+                    <span>📍{{ infoEvent()!.lugar }}</span>
+                }@else {
+                    <span>📍No hay ubicación</span>
+                }
+                
+                <!-- <span>📍 {{infoEvent()!.lugar}}</span> -->
+            </div>
+        </div>
+        <div class="event-status" [ngClass]="infoEvent()!.estado === 0 ? 'active' : 'finished'"> {{infoEvent()!.estado === 0 ? "🟢 Activo": "⛔Finalizado"}}</div>
+</div>

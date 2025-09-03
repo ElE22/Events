@@ -6,6 +6,7 @@ export interface EventData {
   fecha: string;
   lugar: string;
   estado: number;
+  pregunta: string;
   opciones_satisfaccion: [string, string?][];
 }
 

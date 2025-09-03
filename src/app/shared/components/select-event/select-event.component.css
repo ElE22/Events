@@ -1,0 +1,135 @@
+/* Fondo oscuro translúcido */
+.popup-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6); /* Un poco más oscuro */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Contenedor del contenido */
+.popup-content {
+  background: #f7f9fc; /* Fondo gris claro para contraste */
+  border-radius: 16px;
+  padding: 1.5rem; /* Padding general */
+  width: 90%;
+  max-height: 85vh;
+  overflow-y: auto;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+  animation: slideUp 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Encabezado */
+.popup-header {
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid #e0e0e0;
+  display: flex;
+  justify-content: space-between;
+}
+
+.popup-header h2 {
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #1a202c;
+}
+
+/* Botón de cierre */
+
+.popup-close {
+   position: static; /* Ya no es absoluto */
+  font-size: 2rem;
+  line-height: 1; /* Para un mejor centrado vertical */
+  margin-left: 1rem;
+  background: transparent;
+  border: none;
+  font-size: 1.8rem;
+  cursor: pointer;
+  color: #555;
+  transition: color 0.2s;
+}
+
+.popup-close:hover {
+  color: #e63946;
+}
+
+/* Lista de eventos */
+.event-list {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: 1fr; /* Una columna por defecto */
+}
+
+/* Estilos de las tarjetas dentro de la lista */
+.event-list app-card-item-event {
+  cursor: pointer;
+  transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+  border-radius: 8px; 
+  overflow: hidden;
+}
+
+.event-list app-card-item-event:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+}
+
+/* Caso especial: cuando solo hay un evento */
+.event-list:has(app-card-item-event:only-child) {
+    display: flex;
+    justify-content: center;
+}
+
+.event-list app-card-item-event:only-child {
+    max-width: 350px;
+    width: 100%;
+}
+
+
+/* Mensaje sin eventos */
+.no-events {
+  text-align: center;
+  color: #718096;
+  padding: 3rem 1rem;
+  font-style: italic;
+}
+
+/* Media queries para responsividad */
+@media (min-width: 640px) {
+  .event-list {
+    grid-template-columns: repeat(2, 1fr); /* Dos columnas */
+  }
+}
+
+@media (min-width: 1024px) {
+  .popup-content {
+      max-width: 900px;
+  }
+  .event-list {
+    grid-template-columns: repeat(3, 1fr); /* Tres columnas */
+  }
+}
+
+
+/* Scrollbar personalizado */
+.popup-content::-webkit-scrollbar { width: 8px; }
+.popup-content::-webkit-scrollbar-track { background: #e2e8f0; border-radius: 10px; }
+.popup-content::-webkit-scrollbar-thumb { background: #a0aec0; border-radius: 10px; }
+.popup-content::-webkit-scrollbar-thumb:hover { background: #718096; }
+
+
+/* Animaciones */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(30px) scale(0.98); opacity: 0; }
+  to { transform: translateY(0) scale(1); opacity: 1; }
+}
